@@ -1,0 +1,3 @@
+include COPYING
+graft tracbootstraptheme/templates
+graft tracbootstraptheme/htdocs
