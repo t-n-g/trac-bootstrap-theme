@@ -23,6 +23,7 @@ __all__ = ['TracBootstrapTheme']
 
 
 _stylesheets = (
+    'tracbootstraptheme/css/trac.css',
     'tracbootstraptheme/css/bootstrap.min.css',
     'tracbootstraptheme/css/font-awesome.min.css',
     'tracbootstraptheme/css/trac-bootstrap.css',
@@ -30,6 +31,7 @@ _stylesheets = (
 
 _javascripts = (
     'tracbootstraptheme/js/bootstrap.min.js',
+    'tracbootstraptheme/js/trac-bootstrap.js',
     )
 
 class TracBootstrapTheme(Component):
@@ -62,9 +64,11 @@ class TracBootstrapTheme(Component):
         def repl_link(name, event):
             attrs = event[1][1]
             if attrs.get(name):
-                if attrs.get(name).endswith("common/css/trac.css"):
-                    return attrs.get(name).replace("common/css/trac.css", 'tracbootstraptheme/css/trac.css')
-            return attrs.get(name)
+                if attrs.get(name).endswith("common/css/timeline.css"):
+                    return attrs.get(name).replace("common/css/timeline.css", 'tracbootstraptheme/css/timeline.css')
+                if attrs.get(name).endswith("common/css/report.css"):
+                    return attrs.get(name).replace("common/css/report.css", 'tracbootstraptheme/css/report.css')
+                return attrs.get(name)
 
         stream = stream | Transformer('//head/link').attr('href', repl_link)
         return stream
@@ -79,8 +83,41 @@ class TracBootstrapTheme(Component):
         yield 'bootstrap_honoka'
 
     def get_template_overrides(self, name):
-        yield ('wiki_page_path.html', 'bootstrap_wiki_page_path.html', None)
-        #yield ('wiki_view.html', 'bootstrap_wiki_view.html', None)
+        yield ('admin_basics.html', 'bootstrap_admin_basics.html', None)
+        yield ('admin_components.html', 'bootstrap_admin_components.html', None)
+        yield ('admin_enums.html', 'bootstrap_admin_enums.html', None)
+        yield ('admin_logging.html', 'bootstrap_admin_logging.html', None)
+        yield ('admin_milestones.html', 'bootstrap_admin_milestones.html', None)
+        yield ('admin_perms.html', 'bootstrap_admin_perms.html', None)
+        yield ('admin_plugins.html', 'bootstrap_admin_plugins.html', None)
+        yield ('admin_versions.html', 'bootstrap_admin_versions.html', None)
+        yield ('attachment.html', 'bootstrap_attachment.html', None)
+        yield ('history_view.html', 'bootstrap_history_view.html', None)
+        yield ('milestone_delete.html', 'bootstrap_milestone_delete.html', None)
+        yield ('milestone_edit.html', 'bootstrap_milestone_edit.html', None)
+        yield ('milestone_view.html', 'bootstrap_milestone_view.html', None)
+        yield ('prefs_advanced.html', 'bootstrap_prefs_advanced.html', None)
+        yield ('prefs_general.html', 'bootstrap_prefs_general.html', None)
+        yield ('prefs_keybindings.html', 'bootstrap_prefs_keybindings.html', None)
+        yield ('prefs_localization.html', 'bootstrap_prefs_localization.html', None)
+        yield ('prefs_notification.html', 'bootstrap_prefs_notification.html', None)
+        yield ('prefs_pygments.html', 'bootstrap_prefs_pygments.html', None)
+        yield ('prefs_userinterface.html', 'bootstrap_prefs_userinterface.html', None)
+        yield ('query.html', 'bootstrap_query.html', None)
+        yield ('roadmap.html', 'bootstrap_roadmap.html', None)
+        yield ('report_delete.html', 'bootstrap_report_delete.html', None)
+        yield ('report_edit.html', 'bootstrap_report_edit.html', None)
+        yield ('report_list.html', 'bootstrap_report_list.html', None)
+        yield ('report_view.html', 'bootstrap_report_view.html', None)
+        yield ('ticket.html', 'bootstrap_ticket.html', None)
+        yield ('timeline.html', 'bootstrap_timeline.html', None)
+        yield ('wiki_delete.html', 'bootstrap_wiki_delete.html', None)
+        yield ('wiki_diff.html', 'bootstrap_wiki_diff.html', None)
+        yield ('wiki_edit.html', 'bootstrap_wiki_edit.html', None)
+        yield ('wiki_edit_comment.html', 'bootstrap_wiki_edit_comment.html', None)
+        yield ('wiki_edit_form.html', 'bootstrap_wiki_edit_form.html', None)
+        yield ('wiki_rename.html', 'bootstrap_wiki_rename.html', None)
+        yield ('wiki_view.html', 'bootstrap_wiki_view.html', None)
 
     def get_theme_info(self, name):
         if not name.startswith('bootstrap_'):
@@ -88,6 +125,7 @@ class TracBootstrapTheme(Component):
         return {
             'description': 'Bootstrap theme powered by Honoka.',
             'screenshot': 'htdocs/screenshot.png',
+            'disable_trac_css' : True,
         }
 
     def _get_bootstrap_theme(self):
@@ -97,7 +135,8 @@ class TracBootstrapTheme(Component):
             if name and name.startswith('bootstrap_'):
                 theme = {'name': name,
                          'stylesheets': list(self._get_stylesheets()),
-                         'javascripts': list(self._get_javascripts())}
+                         'javascripts': list(self._get_javascripts()),
+                }
             else:
                 theme = {}
             self._bootstrap_theme = theme

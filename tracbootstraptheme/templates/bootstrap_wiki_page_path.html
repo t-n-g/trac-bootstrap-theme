@@ -12,7 +12,7 @@
      xmlns:py="http://genshi.edgewall.org/"
      xmlns:i18n="http://genshi.edgewall.org/i18n"
      xmlns:xi="http://www.w3.org/2001/XInclude"
-  id="breadcrumb" class="noprint col-sm-6" py:with="parts = page.name.split('/')">
+  class="noprint" py:with="parts = page.name.split('/')">
   <ul class="breadcrumb">
     <li><a class="first" title="View WikiStart" href="${href.wiki()}">wiki</a></li>
     <py:for each="idx, part in enumerate(parts)">

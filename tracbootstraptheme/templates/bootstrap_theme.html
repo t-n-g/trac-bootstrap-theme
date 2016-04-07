@@ -1,19 +1,20 @@
 <?python
+from genshi.input import HTML
 from genshi.builder import tag
 from genshi.core import QName
 
 first_metanav = chrome['nav']['metanav'][0]['label']
 if hasattr(first_metanav, 'children'):
-  user_menu_text = first_metanav.children
+  user_menu_text = HTML(u''.join(unicode(item) for item in first_metanav.children))
 else:
   user_menu_text = first_metanav
 
 new_ctxtnav = []
 for element in chrome['ctxtnav']:
   if hasattr(element, 'attrib'):
-    element.attrib = element.attrib | [(QName('class'), 'btn')]
+    element.attrib = element.attrib | [(QName('class'), 'btn btn-link')]
   else:
-    elemnet = tag.a(element, class_='btn disabled')
+    element = tag.a(element, class_='btn btn-link disabled')
   new_ctxtnav.append(element)
 chrome['ctxtnav'] = new_ctxtnav
 
@@ -24,8 +25,6 @@ for element in chrome['nav']['mainnav']:
     new_mainnav.append(element)
   else:
     new_subnav.append(element)
-
-print(resourcepath_template)
 ?>
 
 <!DOCTYPE html
@@ -74,7 +73,7 @@ print(resourcepath_template)
               </li>
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                  <i class="fa fa-user fa-fw"></i> ${user_menu_text} <span class="caret"></span>
+                  <i class="fa fa-user fa-fw"></i><span id="user-menu-text"> ${user_menu_text} </span><span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" role="menu" py:if="chrome.nav['metanav']">
                   <li py:for="idx, item in  enumerate(chrome.nav['metanav'])"
@@ -87,45 +86,42 @@ print(resourcepath_template)
       </div><!-- navbar -->
     </header>
 
-    <div id="main" class="container ${classes(uisymbols=req.session.get('ui.use_symbols'),
-                                    uinohelp=req.session.get('ui.hide_help'))}">
+    <p id="page-top"><a class="btn btn-link" href="#wrap"><i class="fa fa-angle-double-up"></i> PAGE TOP</a></p>
+
+    <div id="ctxnav" class="noprint container">
+
       <xi:include py:if="value_of('resourcepath_template')" href="bootstrap_wiki_page_path.html" />
 
-      <!--<div id="ctxtnav" class="nav">
-        <h2>Context Navigation</h2>
-        <ul py:if="chrome.ctxtnav">
-          <li py:for="i, elm in enumerate(chrome.ctxtnav)"
-              class="${classes(first_last(i, chrome.ctxtnav))}">$elm</li>
-        </ul>
-        <hr />
-      </div>-->
-      <div id="" class="col-sm-6">
-        <ul py:if="chrome.ctxtnav" class="pager">
-          <li py:for="i, elm in enumerate(chrome.ctxtnav)"
-              class="${classes(first_last(i, chrome.ctxtnav))}">$elm</li>
-        </ul>
+      <div py:if="chrome.ctxtnav" class="pull-right btn-group">
+        <py:for each="i, elm in enumerate(chrome.ctxtnav)">$elm</py:for>
       </div>
-
-      <div class="col-sm-12">
-
-      <div id="warning" py:if="chrome.warnings" class="system-message">
-        <a class="trac-close-msg" href="#" title="Hide this warning"><span>close</span></a>
-        <py:choose test="len(chrome.warnings)">
-          <strong>Warning:</strong>
-          <py:when test="1">${chrome.warnings[0]}</py:when>
-          <py:otherwise><ul><li py:for="warning in chrome.warnings">$warning</li></ul></py:otherwise>
-        </py:choose>
-      </div>
-      <div id="notice" py:if="chrome.notices" class="system-message">
-        <a class="trac-close-msg" href="#" title="Hide this notice"><span>close</span></a>
-        <py:choose test="len(chrome.notices)">
-          <py:when test="1">${chrome.notices[0]}</py:when>
-          <py:otherwise><ul><li py:for="notice in chrome.notices">$notice</li></ul></py:otherwise>
-        </py:choose>
-      </div>
-
-      ${select('*|text()|comment()')}
     </div>
+    <div id="ctxnav-shadow" class="noprint"></div>
+
+    <div id="main" class="container ${classes(uisymbols=req.session.get('ui.use_symbols'),
+                                    uinohelp=req.session.get('ui.hide_help'))}">
+
+      <div class="row"><div class="col-sm-12">
+
+        <div id="warning" py:if="chrome.warnings" class="system-message">
+          <a class="trac-close-msg" href="#" title="Hide this warning"><span>close</span></a>
+          <py:choose test="len(chrome.warnings)">
+            <strong>Warning:</strong>
+            <py:when test="1">${chrome.warnings[0]}</py:when>
+            <py:otherwise><ul><li py:for="warning in chrome.warnings">$warning</li></ul></py:otherwise>
+          </py:choose>
+        </div>
+        <div id="notice" py:if="chrome.notices" class="system-message">
+          <a class="trac-close-msg" href="#" title="Hide this notice"><span>close</span></a>
+          <py:choose test="len(chrome.notices)">
+            <py:when test="1">${chrome.notices[0]}</py:when>
+            <py:otherwise><ul><li py:for="notice in chrome.notices">$notice</li></ul></py:otherwise>
+          </py:choose>
+        </div>
+
+        ${select('*|text()|comment()')}
+
+      </div></div>
 
     </div>
 
