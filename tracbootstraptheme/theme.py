@@ -64,10 +64,12 @@ class TracBootstrapTheme(Component):
         def repl_link(name, event):
             attrs = event[1][1]
             if attrs.get(name):
-                if attrs.get(name).endswith("common/css/timeline.css"):
-                    return attrs.get(name).replace("common/css/timeline.css", 'tracbootstraptheme/css/timeline.css')
                 if attrs.get(name).endswith("common/css/report.css"):
                     return attrs.get(name).replace("common/css/report.css", 'tracbootstraptheme/css/report.css')
+                if attrs.get(name).endswith("common/css/ticket.css"):
+                    return attrs.get(name).replace("common/css/ticket.css", 'tracbootstraptheme/css/ticket.css')
+                if attrs.get(name).endswith("common/css/timeline.css"):
+                    return attrs.get(name).replace("common/css/timeline.css", 'tracbootstraptheme/css/timeline.css')
                 return attrs.get(name)
 
         stream = stream | Transformer('//head/link').attr('href', repl_link)

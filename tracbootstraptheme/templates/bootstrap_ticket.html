@@ -8,6 +8,41 @@
   individuals. For the exact contribution history, see the revision
   history and logs, available at http://trac.edgewall.org/.
 -->
+<?python
+from genshi.input import HTML
+from genshi.builder import tag
+from genshi.core import QName
+
+can_append = 'TICKET_APPEND' in perm(ticket.resource)
+can_create = 'TICKET_CREATE' in perm(ticket.resource) and not ticket.exists
+can_modify = 'TICKET_CHGPROP' in perm(ticket.resource)
+can_edit = 'TICKET_EDIT_DESCRIPTION' in perm(ticket.resource)
+only_for_admin = 'TICKET_ADMIN' in perm(ticket.resource)
+has_edit_comment = 'TICKET_EDIT_COMMENT' in perm(ticket.resource)
+has_property_editor = (not version) \
+                      and (version != 0 and not cnum_edit) \
+                      and (can_append or can_modify or can_edit or can_create)
+
+elements = []
+if ticket.exists:
+  elements.append(tag.a(_('Comment'), id_='trac-jump-comment', href_='#comment', title_=_( 'Go to the comment input')))
+if (ticket.exists or preview_mode) and has_property_editor:
+  elements.append(tag.a(_('Modify'), id_='trac-jump-modify', href_='#modify', title_=_( 'Go to the ticket editor')))
+if ticket.exists:
+  elements.append(tag.a(_('Description'), id_='trac-jump-view', href_='#content', title_=_( 'View the ticket description')))
+  elements.append(tag.a(_('Attachments'), id_='trac-jump-attachments', href_='#attachments', title_=_( 'Go to the list of attachments')))
+  if len(changes):
+    elements.append(tag.a(_('Changelog'), id_='trac-jump-changelog', href_='#changelog', title_=_( 'Go to the ticket changelog')))
+if len(elements):
+  first_element = elements.pop(0)
+  first_element.attrib = first_element.attrib | [(QName('class'), 'btn btn-link')]
+  dropdown_elements = [ tag.li(elm) for elm in elements]
+  jumpbutton = tag.div([first_element,
+                       tag.a(tag.span(class_='caret'), href_='#', class_='btn btn-link dropdown-toggle', data_toggle_='dropdown', aria_expanded_='false'),
+                       tag.ul(dropdown_elements, class_='dropdown-menu')], class_='btn-group')
+  chrome['ctxtnav'].insert(0, jumpbutton)
+?>
+
 <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -29,13 +64,24 @@
         $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
         $(".foldable").enableFolding(false, true);
       <py:when test="ticket.exists">/*<![CDATA[*/
-        $("#attachments").toggleClass("collapsed");
-        $("#trac-up-attachments").click(function () {
-          $("#attachments").removeClass("collapsed");
+        $("#attachments").collapse('hide');
+        $("#trac-jump-attachments").click(function () {
+          $("#attachments").collapse('show');
           return true;
         });
-        $("#modify").parent().toggleClass("collapsed");
-        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        $("#trac-jump-changelog").click(function () {
+          $("#changelog").collapse('show');
+          return true;
+        });
+        $("#modify").collapse('hide');
+        $("#trac-jump-modify").click(function() {
+          $("#modify").collapse('show');
+          return true;
+        });
+        $("#trac-jump-comment").click(function() {
+          $("#comment").collapse('show');
+          return true;
+        });
 
         function setRevertHandler() {
           $("button.trac-revert").click(function() {
@@ -115,19 +161,8 @@
       <a href="#comment:$cnum" class="$cls">$prefix$cnum</a>
     </py:def>
 
-    <div id="content" class="ticket"
-         py:with="can_append = 'TICKET_APPEND' in perm(ticket.resource);
-                  can_create = 'TICKET_CREATE' in perm(ticket.resource) and not ticket.exists;
-                  can_modify = 'TICKET_CHGPROP' in perm(ticket.resource);
-                  can_edit = 'TICKET_EDIT_DESCRIPTION' in perm(ticket.resource);
-                  only_for_admin = 'TICKET_ADMIN' in perm(ticket.resource);
-                  has_edit_comment = 'TICKET_EDIT_COMMENT' in perm(ticket.resource);
-                  has_property_editor = not version and version != 0 and not cnum_edit
-                                        and (can_append or can_modify or can_edit or can_create)">
+    <div id="content" class="ticket">
 
-      <div class="trac-topnav" py:if="(ticket.exists or preview_mode) and has_property_editor">
-        <a href="#modify" title="Go to the ticket editor">Modify</a> &darr;
-      </div>
       <h1 py:if="not ticket.exists">
         Create New Ticket <span py:if="preview_mode and ticket.type" class="status">(${ticket.type})</span>
       </h1>
@@ -163,16 +198,24 @@
             </form>
           </div>
 
-          <h3 class="foldable">Change History <span class="trac-count">(${len(changes)})</span></h3>
-
-          <div id="changelog">
-            <py:for each="change in changes">
-              <div class="change${' trac-new' if change.date > start_time and 'attachment' not in change.fields else None}"
-                   id="${'trac-change-%d-%d' % (change.cnum, to_utimestamp(change.date)) if 'cnum' in change else None}">
-                <xi:include href="bootstrap_ticket_change.html"/>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                <a data-toggle="collapse" href="#changelog">Change History <span class="trac-count">(${len(changes)})</span></a>
+              </h3>
+            </div>
+            <div id="changelog" class="panel-collapse collapse in">
+              <div class="panel-body">
+                <py:for each="change in changes">
+                  <div class="change${' trac-new' if change.date > start_time and 'attachment' not in change.fields else None}"
+                       id="${'trac-change-%d-%d' % (change.cnum, to_utimestamp(change.date)) if 'cnum' in change else None}">
+                    <xi:include href="bootstrap_ticket_change.html"/>
+                  </div>
+                </py:for>
               </div>
-            </py:for>
+            </div>
           </div>
+
         </div>
       </py:if>
       <!--! End of the section we don't show on initial new tickets -->
@@ -180,9 +223,14 @@
       <form py:if="has_property_editor" method="post" id="propertyform"
             action="${href.ticket(ticket.id) + '#trac-add-comment' if ticket.exists
                       else href.newticket() + '#ticket'}">
-        <div>
-          <h3 py:if="ticket.exists" class="foldable">Modify Ticket</h3>
-          <div id="modify">
+        <div class="${'panel panel-default' if ticket.exists else None}">
+          <div py:if="ticket.exists" class="panel-heading">
+            <h3 class="panel-title">
+              <a data-toggle="collapse" href="#modify">Modify Ticket</a>
+            </h3>
+          </div>
+          <div id="modify" class="${'panel-collapse collapse in' if ticket.exists else None}">
+
             <!--! Properties -->
             <fieldset id="properties" py:if="can_modify or can_edit or can_create"
                       py:with="fields = [f for f in fields if not f.skip and f.editable]">
@@ -325,9 +373,14 @@ ${value}</textarea>
 
         <!--! Add comment -->
         <div py:if="ticket.exists and can_append" id="trac-add-comment"
-             class="${classes('field', 'trac-scroll' if preview_mode else None)}">
-          <h3 class="foldable" id="edit">Add Comment</h3>
-          <div>
+             class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <a data-toggle="collapse" href="#comment">Add Comment</a>
+            </h3>
+          </div>
+          <div id="comment" class="panel-collapse collapse in">
+            <div class="panel-body">
             <div id="trac-edit-warning" class="warning system-message"
                  style="${'display: none' if start_time == ticket['changetime'] else None}"
                  i18n:msg="">
@@ -360,6 +413,7 @@ ${value}</textarea>
               <textarea id="comment" name="comment" class="${classes('wikitext', 'trac-fullwidth', 'trac-resizable', 'trac-autofocus' if replyto else None)}" rows="10" cols="78">
 ${comment}</textarea>
             </fieldset>
+            </div>
           </div>
         </div>
 
@@ -371,10 +425,6 @@ ${comment}</textarea>
           </label>
         </p>
 
-        <div py:if="ticket.exists" class="trac-nav">
-          <a href="#attachments" id="trac-up-attachments" title="Go to the list of attachments">Attachments</a> &uarr;
-          <a href="#content" id="trac-up-view" title="View the ticket description">Description</a> &uarr;
-        </div>
         <div class="buttons">
           <py:if test="ticket.exists">
             <input type="hidden" name="start_time" value="${to_utimestamp(start_time)}" />

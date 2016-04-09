@@ -33,36 +33,50 @@ Arguments:
     </i18n:msg>
   </py:def>
   <py:if test="alist.attachments or alist.can_create">
-    <div id="attachments" py:choose="">
+    <div class="panel panel-default" py:choose="">
       <py:when test="compact and alist.attachments">
-        <h3 class="${'foldable' if foldable else None}">Attachments <span class="trac-count">(${len(alist.attachments)})</span></h3>
-        <div>
-          <ul>
-            <li py:for="attachment in alist.attachments">
-              ${show_one_attachment(attachment)}
-              <q py:if="compact and attachment.description">${wiki_to_oneliner(context, attachment.description)}</q>
-            </li>
-          </ul>
-          <p py:if="alist.download_href">
-            Download all attachments as: <a rel="nofollow" href="$alist.download_href">.zip</a>
-          </p>
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <a data-toggle="${'collapse' if foldable else None}" href="#attachments">Attachments <span class="trac-count">(${len(alist.attachments)})</span></a>
+          </h3>
+        </div>
+        <div id="attachments" class="panel-collapse collapse in">
+          <div class="panel-body">
+            <ul>
+              <li py:for="attachment in alist.attachments">
+                ${show_one_attachment(attachment)}
+                <q py:if="compact and attachment.description">${wiki_to_oneliner(context, attachment.description)}</q>
+              </li>
+            </ul>
+            <p py:if="alist.download_href">
+              Download all attachments as: <a rel="nofollow" href="$alist.download_href">.zip</a>
+            </p>
+          </div>
         </div>
       </py:when>
       <py:when test="not compact">
-        <h3 class="${'foldable' if foldable else None}">Attachments <span class="trac-count">(${len(alist.attachments)})</span></h3>
-        <div py:if="alist.attachments or alist.can_create" class="attachments">
-          <dl py:if="alist.attachments" class="attachments">
-            <py:for each="attachment in alist.attachments">
-              <dt>${show_one_attachment(attachment)}</dt>
-              <dd py:if="attachment.description">
-                ${wiki_to_oneliner(context, attachment.description)}
-              </dd>
-            </py:for>
-          </dl>
-          <p py:if="alist.attachments and alist.download_href">
-            Download all attachments as: <a rel="nofollow" href="$alist.download_href">.zip</a>
-          </p>
-          <xi:include href="bootstrap_attach_file_form.html"/>
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <a data-toggle="${'collapse' if foldable else None}" href="#attachments">Attachments <span class="trac-count">(${len(alist.attachments)})</span></a>
+          </h3>
+        </div>
+        <div id="attachments" class="panel-collapse collapse in">
+          <div class="panel-body">
+            <div py:if="alist.attachments or alist.can_create" class="attachments">
+              <dl py:if="alist.attachments" class="attachments">
+                <py:for each="attachment in alist.attachments">
+                  <dt>${show_one_attachment(attachment)}</dt>
+                  <dd py:if="attachment.description">
+                    ${wiki_to_oneliner(context, attachment.description)}
+                  </dd>
+                </py:for>
+              </dl>
+              <p py:if="alist.attachments and alist.download_href">
+                Download all attachments as: <a rel="nofollow" href="$alist.download_href">.zip</a>
+              </p>
+              <xi:include href="bootstrap_attach_file_form.html"/>
+            </div>
+          </div>
         </div>
       </py:when>
     </div>

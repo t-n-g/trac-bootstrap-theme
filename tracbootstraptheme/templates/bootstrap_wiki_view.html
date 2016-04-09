@@ -33,6 +33,7 @@
           $(this).addAnchor(babel.format(_("Link to #%(id)s"), {id: $(this).attr('id')}));
         });
         $(".foldable").enableFolding(true, true);
+        $("#attachments").collapse('hide');
       });
     </script>
   </head>
@@ -76,7 +77,7 @@
         </py:otherwise>
       </div>
 
-      <xi:include href="list_of_attachments.html"
+      <xi:include href="bootstrap_list_of_attachments.html"
                   py:with="alist = attachments; compact = True; foldable = True"/>
 
       <py:with vars="delete_perm = 'WIKI_DELETE' in perm(page.resource);

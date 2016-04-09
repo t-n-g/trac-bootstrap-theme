@@ -87,7 +87,15 @@ ul.navbar-nav {
   position: fixed;
   bottom: 20px;
   right: 20px;
+  padding: 12px 0;
   z-index: 1060;
+  background-color: #eee;
+  filter: alpha(opacity=65);
+  opacity: .65;
+}
+#page-top:hover {
+  filter: alpha(opacity=100);
+  opacity: 1.00;
 }
 
 #ctxnav.ctxnav-fixed {

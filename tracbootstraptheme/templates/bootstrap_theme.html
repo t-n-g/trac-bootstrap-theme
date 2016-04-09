@@ -12,7 +12,8 @@ else:
 new_ctxtnav = []
 for element in chrome['ctxtnav']:
   if hasattr(element, 'attrib'):
-    element.attrib = element.attrib | [(QName('class'), 'btn btn-link')]
+    if element.tag != QName('div'):
+      element.attrib = element.attrib | [(QName('class'), 'btn btn-link')]
   else:
     element = tag.a(element, class_='btn btn-link disabled')
   new_ctxtnav.append(element)
@@ -92,7 +93,7 @@ for element in chrome['nav']['mainnav']:
 
       <xi:include py:if="value_of('resourcepath_template')" href="bootstrap_wiki_page_path.html" />
 
-      <div py:if="chrome.ctxtnav" class="pull-right btn-group">
+      <div py:if="chrome.ctxtnav" class="pull-right btn-toolbar">
         <py:for each="i, elm in enumerate(chrome.ctxtnav)">$elm</py:for>
       </div>
     </div>
