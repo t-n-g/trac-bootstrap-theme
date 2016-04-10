@@ -79,7 +79,7 @@
         ${wiki_to_html(context, milestone.description)}
       </div>
 
-      <xi:include href="list_of_attachments.html"
+      <xi:include href="bootstrap_list_of_attachments.html"
                   py:with="alist = attachments; compact = True; foldable = True"/>
 
       <div py:if="'MILESTONE_MODIFY' in perm(milestone.resource) or

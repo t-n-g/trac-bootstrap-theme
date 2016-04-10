@@ -96,7 +96,7 @@
       <py:when test="'list'">
         <h1><a href="${url_of(parent)}">${name_of(parent)}</a></h1>
         <py:with vars="context = context.child(parent)">
-          <xi:include href="list_of_attachments.html" py:with="alist = attachments"/>
+          <xi:include href="bootstrap_list_of_attachments.html" py:with="alist = attachments"/>
         </py:with>
       </py:when>
 

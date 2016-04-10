@@ -115,14 +115,7 @@ input[type=text]:focus, input.textwidget:focus, textarea:focus {
  border: 1px solid #886;
 }
 option { border-bottom: 1px dotted #d7d7d7 }
-fieldset {
- border: 1px solid #d7d7d7;
- border-radius: .4em;
- margin: 1em 0;
- background: #F7F7F0;
- box-shadow: .1em .1em 1em 0 #E7E7E7 inset;
- padding: 1em;
-}
+
 p.hint, span.hint, span.trac-datetimehint {
  color: #666;
  font-size: 85%;
@@ -132,13 +125,7 @@ p.hint, span.hint, span.trac-datetimehint {
 }
 span.hint { vertical-align: middle; }
 p.help { color: #666; font-size: 90%; margin: 1em .5em .5em; }
-legend {
- color: #999;
- margin-left: .6em;
- padding: 0 .25em;
- font-size: 90%;
- font-weight: bold;
-}
+
 label.disabled, .disabled span.hint, .disabled p.help, .disabled legend,
 .disabled input, .disabled select, .readonly span.hint, .readonly p.help {
  color: #d7d7d7
@@ -516,34 +503,114 @@ table.wiki tbody tr.odd { background-color: #f7f7f7 }
 
 .wikitoolbar {
  margin-top: 0.3em;
+ margin-bottom: 0.1em;
  border: solid #d7d7d7;
  border-width: 1px 1px 1px 0;
- height: 18px;
- width: 234px;
+ height: 20px;
+ width: 235px;
 }
 .wikitoolbar :link, .wikitoolbar :visited {
- background: transparent url(../edit_toolbar.png) no-repeat;
  border: 1px solid #fff;
  border-left-color: #d7d7d7;
  cursor: default;
  display: block;
  float: left;
- width: 24px;
- height: 16px;
+ width: 26px;
+ height: 18px;
 }
 .wikitoolbar :link:hover, .wikitoolbar :visited:hover {
- background-color: transparent;
  border: 1px solid #fb2;
 }
-.wikitoolbar a#em { background-position: 0 0 }
-.wikitoolbar a#strong { background-position: 0 -16px }
-.wikitoolbar a#heading { background-position: 0 -32px }
-.wikitoolbar a#link { background-position: 0 -48px }
-.wikitoolbar a#code { background-position: 0 -64px }
-.wikitoolbar a#hr { background-position: 0 -80px }
-.wikitoolbar a#np { background-position: 0 -96px }
-.wikitoolbar a#br { background-position: 0 -112px }
-.wikitoolbar a#img { background-position: 0 -128px }
+.wikitoolbar a#strong {
+  position: relative;
+}
+.wikitoolbar a#strong:before {
+  content: "\f032";
+  font-family: FontAwesome;
+  position: absolute;
+  left: 7px;
+  top: -1px;
+}
+.wikitoolbar a#em {
+  position: relative;
+}
+.wikitoolbar a#em:before {
+  content: "\f033";
+  font-family: FontAwesome;
+  position: absolute;
+  left: 7px;
+  top: -1px;
+}
+.wikitoolbar a#heading {
+  position: relative;
+}
+.wikitoolbar a#heading:before {
+  content: "\f1dc";
+  font-family: FontAwesome;
+  position: absolute;
+  left: 7px;
+  top: -1px;
+}
+.wikitoolbar a#link {
+  position: relative;
+}
+.wikitoolbar a#link:before {
+  content: "\f08e";
+  font-family: FontAwesome;
+  position: absolute;
+  left: 7px;
+  top: -1px;
+}
+.wikitoolbar a#code {
+  position: relative;
+}
+.wikitoolbar a#code:before {
+  content: "\f121";
+  font-family: FontAwesome;
+  position: absolute;
+  left: 7px;
+  top: -1px;
+}
+.wikitoolbar a#hr {
+  position: relative;
+}
+.wikitoolbar a#hr:before {
+  content: "\f0cd";
+  font-family: FontAwesome;
+  position: absolute;
+  left: 7px;
+  top: -1px;
+}
+.wikitoolbar a#np {
+  position: relative;
+}
+.wikitoolbar a#np:before {
+  content: "\f1dd";
+  font-family: FontAwesome;
+  position: absolute;
+  left: 7px;
+  top: -1px;
+}
+.wikitoolbar a#br {
+  position: relative;
+}
+.wikitoolbar a#br:before {
+  content: "\f149";
+  font-family: FontAwesome;
+  position: absolute;
+  left: 7px;
+  top: -1px;
+}
+.wikitoolbar a#img {
+  position: relative;
+}
+.wikitoolbar a#img:before {
+  content: "\f03e";
+  font-family: FontAwesome;
+  position: absolute;
+  left: 7px;
+  top: -1px;
+}
 
 /* Textarea resizer */
 div.trac-resizable { display: table; width: 100% }

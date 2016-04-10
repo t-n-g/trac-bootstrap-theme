@@ -1,10 +1,30 @@
 @import url(code.css);
 
 #content.ticket {
- width: 58em;
+ font-size: 14px;
+ width: 70em;
  max-width: 100%;
  margin-left: auto;
  margin-right: auto;
+}
+
+#content.ticket h1 {
+ font-size: 24px;
+}
+#content.ticket h2 {
+ font-size: 19px;
+}
+#content.ticket h3 {
+ font-size: 14px;
+}
+#content.ticket h4 {
+ font-size: 13px;
+}
+#content.ticket h5 {
+ font-size: 13px;
+}
+#content.ticket h6 {
+ font-size: 13px;
 }
 
 #field-description-help { float: right }
@@ -272,7 +292,7 @@ label[for=comment] { float: right }
  box-sizing: border-box;
  width: 100%;
 }
-#properties { white-space: nowrap; line-height: 160%; padding: 1em }
+#properties { white-space: nowrap; padding: 1em }
 #properties table.trac-properties > tbody > tr > th,
 #properties table.trac-properties > colgroup > col.th {
  padding: .4em;
@@ -295,7 +315,7 @@ label[for=comment] { float: right }
 #properties table.trac-properties > tbody > tr > td > select { max-width: 100% }
 #properties table.trac-properties > tbody > tr > td > span.hint { padding-left: 0 }
 
-#action { line-height: 2em }
+#action { line-height: 2em; padding: 1em }
 
 fieldset.radio { border: none; margin: 0; padding: 0 }
 fieldset.radio legend {
