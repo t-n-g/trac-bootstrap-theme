@@ -13,7 +13,7 @@ from setuptools import setup
 
 setup(
     name = 'TracBootstrapTheme',
-    version = '0.2',
+    version = '0.3',
     description = 'Bootstrap theme for Trac and ThemeEnginePlugin powered on Honoka.',
     url = 'https://github.com/t-kenji/trac-bootstrap-theme',
     keywords = 'trac plugin theme',
