@@ -47,6 +47,11 @@ class TracBootstrapTheme(Component):
     _bootstrap_theme = None
 
     def pre_process_request(self, req, handler):
+        links = req.chrome.get('links')
+        if links and 'stylesheet' in links:
+          for i, link in enumerate(links['stylesheet']):
+            if link.get('href', '').endswith('common/css/trac.css'):
+              del links['stylesheet'][i]
         return handler
 
     def post_process_request(self, req, template, data, content_type):
@@ -95,6 +100,7 @@ class TracBootstrapTheme(Component):
         yield ('admin_versions.html', 'bootstrap_admin_versions.html', None)
         yield ('attachment.html', 'bootstrap_attachment.html', None)
         yield ('history_view.html', 'bootstrap_history_view.html', None)
+        yield ('login.html', 'bootstrap_login.html', None)
         yield ('milestone_delete.html', 'bootstrap_milestone_delete.html', None)
         yield ('milestone_edit.html', 'bootstrap_milestone_edit.html', None)
         yield ('milestone_view.html', 'bootstrap_milestone_view.html', None)
@@ -112,6 +118,7 @@ class TracBootstrapTheme(Component):
         yield ('report_list.html', 'bootstrap_report_list.html', None)
         yield ('report_view.html', 'bootstrap_report_view.html', None)
         yield ('ticket.html', 'bootstrap_ticket.html', None)
+        yield ('ticket_preview.html', 'bootstrap_ticket_preview.html', None)
         yield ('timeline.html', 'bootstrap_timeline.html', None)
         yield ('wiki_delete.html', 'bootstrap_wiki_delete.html', None)
         yield ('wiki_diff.html', 'bootstrap_wiki_diff.html', None)
