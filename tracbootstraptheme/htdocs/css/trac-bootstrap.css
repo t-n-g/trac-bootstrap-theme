@@ -111,3 +111,12 @@ ul.navbar-nav {
 td input[type=radio] {
   margin: 4px 0 6px;
 }
+
+.ticket-summary {
+  margin: 7px -600px 7px 7px;
+  padding-right: 600px;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

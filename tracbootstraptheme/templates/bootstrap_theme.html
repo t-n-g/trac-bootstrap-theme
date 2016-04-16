@@ -91,7 +91,10 @@ for element in chrome['nav']['mainnav']:
 
     <div id="ctxnav" class="noprint container">
 
-      <xi:include py:if="value_of('resourcepath_template')" href="bootstrap_wiki_page_path.html" />
+      <py:choose>
+        <xi:include py:when="value_of('resourcepath_template')" href="bootstrap_wiki_page_path.html" />
+        <xi:include py:when="ticket and ticket.exists" href="bootstrap_ticket_summary.html" />
+      </py:choose>
 
       <div py:if="chrome.ctxtnav" class="pull-right btn-toolbar">
         <py:for each="i, elm in enumerate(chrome.ctxtnav)">$elm</py:for>
