@@ -13,7 +13,7 @@ from setuptools import setup
 
 setup(
     name = 'TracBootstrapTheme',
-    version = '0.3',
+    version = '0.4',
     description = 'Bootstrap theme for Trac and ThemeEnginePlugin powered on Honoka.',
     url = 'https://github.com/t-kenji/trac-bootstrap-theme',
     keywords = 'trac plugin theme',
@@ -25,9 +25,9 @@ setup(
     maintainer='t-kenji',
     maintainer_email='protect.2501@gmail.com',
 
-    packages = ['tracbootstraptheme'],
+    packages = ['bstheme'],
     package_data = {
-        'tracbootstraptheme': [
+        'bstheme': [
             'templates/*.html',
             'htdocs/css/*.css',
             'htdocs/fonts/*.*',
@@ -37,7 +37,7 @@ setup(
     install_requires = ['TracThemeEngine'],
     entry_points = {
         'trac.plugins': [
-            'tracbootstraptheme.theme = tracbootstraptheme.theme',
+            'bstheme.theme = bstheme.theme',
         ]
     },
 )
