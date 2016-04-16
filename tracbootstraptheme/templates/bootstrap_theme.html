@@ -97,7 +97,9 @@ for element in chrome['nav']['mainnav']:
       </py:choose>
 
       <div py:if="chrome.ctxtnav" class="pull-right btn-toolbar">
-        <py:for each="i, elm in enumerate(chrome.ctxtnav)">$elm</py:for>
+        <div class="btn-group">
+          <py:for each="i, elm in enumerate(chrome.ctxtnav)">$elm</py:for>
+        </div>
       </div>
     </div>
     <div id="ctxnav-shadow" class="noprint"></div>
