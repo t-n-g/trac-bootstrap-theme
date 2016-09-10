@@ -47,6 +47,9 @@ class TracBootstrapTheme(Component):
     _bootstrap_theme = None
 
     def pre_process_request(self, req, handler):
+        if not self._is_selected():
+            return handler
+
         links = req.chrome.get('links')
         if links and 'stylesheet' in links:
           for i, link in enumerate(links['stylesheet']):
@@ -55,6 +58,9 @@ class TracBootstrapTheme(Component):
         return handler
 
     def post_process_request(self, req, template, data, content_type):
+        if not self._is_selected():
+            return template, data, content_type
+
         if template:
             theme = self._get_bootstrap_theme()
             if theme:
@@ -66,6 +72,9 @@ class TracBootstrapTheme(Component):
         return template, data, content_type
 
     def filter_stream(self, req, method, filename, stream, data):
+        if not self._is_selected():
+            return stream
+
         def repl_link(name, event):
             attrs = event[1][1]
             if attrs.get(name):
@@ -137,6 +146,14 @@ class TracBootstrapTheme(Component):
             'disable_trac_css' : True,
         }
 
+    def _is_selected(self):
+        theme_name = self.config.get('theme', 'theme', '')
+        if theme_name and theme_name.startswith('bootstrap_'):
+            return True
+        else:
+            return False
+
+        links = req.chrome.get('links')
     def _get_bootstrap_theme(self):
         theme = self._bootstrap_theme
         if theme is None:
