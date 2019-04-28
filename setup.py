@@ -33,6 +33,7 @@ setup(
             'htdocs/fonts/*.*',
             'htdocs/js/*.js',
             'htdocs/*.png',
+            'htdocs/*.gif',
         ]},
     install_requires = ['TracThemeEngine'],
     entry_points = {
